@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { http } from './http';
 
 export type HealthResponse = {
   status?: string;
@@ -6,6 +6,6 @@ export type HealthResponse = {
 };
 
 export async function fetchHealth(): Promise<HealthResponse> {
-  const response = await axios.get<HealthResponse>('/api/health');
+  const response = await http.get<HealthResponse>('/api/health');
   return response.data;
 }
