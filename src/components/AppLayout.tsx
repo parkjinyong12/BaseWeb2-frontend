@@ -1,6 +1,24 @@
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { useSyncExternalStore } from 'react';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { http } from '../api/http';
+import { clearAccessToken, getAccessToken, subscribeAuth } from '../auth/tokenStore';
 
 export function AppLayout() {
+  const navigate = useNavigate();
+  const accessToken = useSyncExternalStore(subscribeAuth, getAccessToken, getAccessToken);
+  const isLoggedIn = Boolean(accessToken);
+
+  const handleLogout = async () => {
+    try {
+      await http.post('/api/auth/logout');
+    } catch {
+      // 서버 요청 실패 여부와 관계없이 클라이언트 인증 상태는 정리합니다.
+    } finally {
+      clearAccessToken();
+      navigate('/login', { replace: true });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="border-b border-slate-200 bg-white">
@@ -8,13 +26,26 @@ export function AppLayout() {
           <Link to="/dashboard" className="text-lg font-semibold text-blue-600">
             BaseWeb2
           </Link>
-          <nav className="flex gap-3 text-sm">
+          <nav className="flex items-center gap-3 text-sm">
             <NavLink to="/dashboard" className={({ isActive }) => (isActive ? 'font-semibold text-blue-600' : 'text-slate-600')}>
               Dashboard
             </NavLink>
-            <NavLink to="/login" className={({ isActive }) => (isActive ? 'font-semibold text-blue-600' : 'text-slate-600')}>
-              Login
-            </NavLink>
+            {isLoggedIn ? (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="rounded-md border border-slate-300 px-3 py-1.5 text-slate-700 hover:bg-slate-100"
+              >
+                Logout
+              </button>
+            ) : (
+              <NavLink
+                to="/login"
+                className={({ isActive }) => (isActive ? 'font-semibold text-blue-600' : 'text-slate-600')}
+              >
+                Login
+              </NavLink>
+            )}
           </nav>
         </div>
       </header>
