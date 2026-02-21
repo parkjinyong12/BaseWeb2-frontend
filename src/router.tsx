@@ -1,11 +1,14 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { getAccessToken } from './auth/tokenStore';
+import { useSyncExternalStore } from 'react';
+import { getAccessToken, subscribeAuth } from './auth/tokenStore';
 import { AppLayout } from './components/AppLayout';
 import { DashboardPage } from './pages/DashboardPage';
 import { LoginPage } from './pages/Login';
 
 function RequireAuth({ children }: { children: JSX.Element }) {
-  if (!getAccessToken()) {
+  const accessToken = useSyncExternalStore(subscribeAuth, getAccessToken, getAccessToken);
+
+  if (!accessToken) {
     return <Navigate to="/login" replace />;
   }
 
@@ -13,7 +16,9 @@ function RequireAuth({ children }: { children: JSX.Element }) {
 }
 
 function RedirectIfAuthenticated({ children }: { children: JSX.Element }) {
-  if (getAccessToken()) {
+  const accessToken = useSyncExternalStore(subscribeAuth, getAccessToken, getAccessToken);
+
+  if (accessToken) {
     return <Navigate to="/dashboard" replace />;
   }
 
