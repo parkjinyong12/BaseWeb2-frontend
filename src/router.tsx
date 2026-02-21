@@ -19,7 +19,7 @@ function RedirectIfAuthenticated({ children }: { children: JSX.Element }) {
   const accessToken = useSyncExternalStore(subscribeAuth, getAccessToken, getAccessToken);
 
   if (accessToken) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/home" replace />;
   }
 
   return children;
@@ -36,7 +36,7 @@ export const router = createBrowserRouter([
     path: '/',
     element: <AppLayout />,
     children: [
-      { index: true, element: <Navigate to="/dashboard" replace /> },
+      { index: true, element: <Navigate to="/home" replace /> },
       {
         path: 'login',
         element: (
@@ -46,7 +46,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: 'dashboard',
+        path: 'home',
         element: dashboardElement,
       },
       {

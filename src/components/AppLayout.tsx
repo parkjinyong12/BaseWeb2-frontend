@@ -23,13 +23,10 @@ export function AppLayout() {
     <div className="min-h-screen bg-slate-50">
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <Link to="/dashboard" className="text-lg font-semibold text-blue-600">
+          <Link to="/home" className="text-lg font-semibold text-blue-600">
             BaseWeb2
           </Link>
           <nav className="flex items-center gap-3 text-sm">
-            <NavLink to="/dashboard" className={({ isActive }) => (isActive ? 'font-semibold text-blue-600' : 'text-slate-600')}>
-              Dashboard
-            </NavLink>
             {isLoggedIn ? (
               <button
                 type="button"

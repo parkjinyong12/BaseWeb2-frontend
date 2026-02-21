@@ -2,10 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { NavLink, useLocation } from 'react-router-dom';
 import { fetchHealth } from '../api/health';
 
-type DashboardMenu = 'dashboard' | 'analytics' | 'users' | 'settings';
+type DashboardMenu = 'home' | 'analytics' | 'users' | 'settings';
 
 const MENU_ITEMS: Array<{ key: DashboardMenu; label: string; to: string }> = [
-  { key: 'dashboard', label: '대시보드', to: '/dashboard' },
+  { key: 'home', label: '홈', to: '/home' },
   { key: 'analytics', label: '분석', to: '/analytics' },
   { key: 'users', label: '사용자', to: '/users' },
   { key: 'settings', label: '설정', to: '/settings' },
@@ -24,7 +24,7 @@ function resolveSelectedMenu(pathname: string): DashboardMenu {
     return 'settings';
   }
 
-  return 'dashboard';
+  return 'home';
 }
 
 export function DashboardPage() {
@@ -72,7 +72,7 @@ export function DashboardPage() {
 
     return (
       <section className="space-y-6">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <h1 className="text-2xl font-bold">홈</h1>
         <div className="grid gap-4 md:grid-cols-2">
           <article className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="text-sm font-medium text-slate-500">Backend Status</h2>
