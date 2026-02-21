@@ -1,18 +1,36 @@
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { NavLink, useLocation } from 'react-router-dom';
 import { fetchHealth } from '../api/health';
 
 type DashboardMenu = 'dashboard' | 'analytics' | 'users' | 'settings';
 
-const MENU_ITEMS: Array<{ key: DashboardMenu; label: string }> = [
-  { key: 'dashboard', label: '대시보드' },
-  { key: 'analytics', label: '분석' },
-  { key: 'users', label: '사용자' },
-  { key: 'settings', label: '설정' },
+const MENU_ITEMS: Array<{ key: DashboardMenu; label: string; to: string }> = [
+  { key: 'dashboard', label: '대시보드', to: '/dashboard' },
+  { key: 'analytics', label: '분석', to: '/analytics' },
+  { key: 'users', label: '사용자', to: '/users' },
+  { key: 'settings', label: '설정', to: '/settings' },
 ];
 
+function resolveSelectedMenu(pathname: string): DashboardMenu {
+  if (pathname === '/analytics') {
+    return 'analytics';
+  }
+
+  if (pathname === '/users') {
+    return 'users';
+  }
+
+  if (pathname === '/settings') {
+    return 'settings';
+  }
+
+  return 'dashboard';
+}
+
 export function DashboardPage() {
-  const [selectedMenu, setSelectedMenu] = useState<DashboardMenu>('dashboard');
+  const { pathname } = useLocation();
+  const selectedMenu = resolveSelectedMenu(pathname);
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ['health'],
     queryFn: fetchHealth,
@@ -80,16 +98,15 @@ export function DashboardPage() {
           {MENU_ITEMS.map((item) => {
             const isActive = selectedMenu === item.key;
             return (
-              <button
+              <NavLink
                 key={item.key}
-                type="button"
-                onClick={() => setSelectedMenu(item.key)}
-                className={`w-full rounded-md px-3 py-2 text-left text-sm font-medium transition ${
+                to={item.to}
+                className={`block w-full rounded-md px-3 py-2 text-left text-sm font-medium transition ${
                   isActive ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100'
                 }`}
               >
                 {item.label}
-              </button>
+              </NavLink>
             );
           })}
         </nav>
