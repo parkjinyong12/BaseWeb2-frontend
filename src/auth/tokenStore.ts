@@ -1,4 +1,14 @@
-let accessToken: string | null = null;
+const ACCESS_TOKEN_STORAGE_KEY = 'baseweb2_access_token';
+
+function readStoredToken(): string | null {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  return window.localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+}
+
+let accessToken: string | null = readStoredToken();
 const listeners = new Set<() => void>();
 
 function notifyListeners(): void {
@@ -7,6 +17,11 @@ function notifyListeners(): void {
 
 export function setAccessToken(token: string): void {
   accessToken = token;
+
+  if (typeof window !== 'undefined') {
+    window.localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, token);
+  }
+
   notifyListeners();
 }
 
@@ -16,6 +31,11 @@ export function getAccessToken(): string | null {
 
 export function clearAccessToken(): void {
   accessToken = null;
+
+  if (typeof window !== 'undefined') {
+    window.localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
+  }
+
   notifyListeners();
 }
 
