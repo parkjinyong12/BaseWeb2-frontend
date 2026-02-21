@@ -12,6 +12,14 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   return children;
 }
 
+function RedirectIfAuthenticated({ children }: { children: JSX.Element }) {
+  if (getAccessToken()) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
+}
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -20,7 +28,11 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate to="/dashboard" replace /> },
       {
         path: 'login',
-        element: getAccessToken() ? <Navigate to="/dashboard" replace /> : <LoginPage />,
+        element: (
+          <RedirectIfAuthenticated>
+            <LoginPage />
+          </RedirectIfAuthenticated>
+        ),
       },
       {
         path: 'dashboard',
