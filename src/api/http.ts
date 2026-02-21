@@ -60,7 +60,11 @@ http.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (originalRequest.url?.includes('/api/auth/login') || originalRequest.url?.includes('/api/auth/refresh')) {
+    if (
+      originalRequest.url?.includes('/api/auth/login')
+      || originalRequest.url?.includes('/api/auth/refresh')
+      || originalRequest.url?.includes('/api/auth/logout')
+    ) {
       return Promise.reject(error);
     }
 
