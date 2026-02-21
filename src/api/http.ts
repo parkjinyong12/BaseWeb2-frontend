@@ -30,7 +30,6 @@ async function refreshAccessToken(): Promise<string> {
       })
       .catch((error: AxiosError) => {
         clearAccessToken();
-        window.location.assign('/login');
         throw error;
       })
       .finally(() => {
