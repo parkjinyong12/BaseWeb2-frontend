@@ -25,6 +25,12 @@ function RedirectIfAuthenticated({ children }: { children: JSX.Element }) {
   return children;
 }
 
+const dashboardElement = (
+  <RequireAuth>
+    <DashboardPage />
+  </RequireAuth>
+);
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -41,11 +47,19 @@ export const router = createBrowserRouter([
       },
       {
         path: 'dashboard',
-        element: (
-          <RequireAuth>
-            <DashboardPage />
-          </RequireAuth>
-        ),
+        element: dashboardElement,
+      },
+      {
+        path: 'analytics',
+        element: dashboardElement,
+      },
+      {
+        path: 'users',
+        element: dashboardElement,
+      },
+      {
+        path: 'settings',
+        element: dashboardElement,
       },
     ],
   },
